@@ -14,15 +14,18 @@ pipeline {
                 scannerHome = '/opt/sonar-scanner'
             }
             steps {
+                script {
+                    def sonarProjectKey = 'your-project-key' // Set your project key here
                 withSonarQubeEnv('Sonar') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${sonarProjectKey}"
+                    }
                 }
             }
         }
 
         stage('Build') {
             steps {
-                //Build the code using Maven
+                // Build the code using Maven
                 sh '''
                 ls
                 cat sonar-project.properties
