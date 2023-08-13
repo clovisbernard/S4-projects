@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     def sonarProjectKey = 'your-project-key' // Set your project key here
-                withSonarQubeEnv('Sonar') {
+                    withSonarQubeEnv('Sonar') {
                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${sonarProjectKey}"
                     }
                 }
@@ -28,10 +28,22 @@ pipeline {
                 // log in to Docker hub
                 sh '''
                 cd auth
-                docker build -t devopseasylearning/s4-pipeline-db:$(BUILD_NUMBER)
+                docker build -t devopseasylearning/s4-pipeline-ui:$(BUILD_NUMBER)
                 cd -
                 '''
             }
         }
+
+        stage('Build weather') {
+            steps {
+                // log in to Docker hub
+                sh '''
+                cd auth
+                docker build -t devopseasylearning/s4-pipeline-weather:$(BUILD_NUMBER)
+                cd -
+                '''
+            }
+        }
+
     }
 }
