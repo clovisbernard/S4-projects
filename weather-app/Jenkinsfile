@@ -41,7 +41,7 @@ pipeline {
 
         stage('Build DB') {
             steps {
-                // log in to Docker hub
+                // log in to Docker hub .......
                 sh '''
                 cd db
                 docker build -t devopseasylearning/s4-pipeline-db:${BUILD_NUMBER} .
