@@ -23,12 +23,70 @@ pipeline {
             }
         }
 
+        stage('Build auth') {
+            steps {
+                // log in to Docker hub
+                sh '''
+                cd auth
+                docker build -t devopseasylearning/s4-pipeline-auth:$(BUILD_NUMBER)
+                cd -
+                '''
+            }
+        }
+
+
+        stage('push auth') {
+            steps {
+                // log in to Docker hub
+                sh '''
+                cd auth
+                docker push -t devopseasylearning/s4-clovis-auth:$(BUILD_NUMBER)
+                cd -
+                '''
+            }
+        }
+
+        stage('Build db') {
+            steps {
+                // log in to Docker hub
+                sh '''
+                cd auth
+                docker build -t devopseasylearning/s4-pipeline-db:$(BUILD_NUMBER)
+                cd -
+                '''
+            }
+        }
+
+        stage('push db') {
+            steps {
+                // log in to Docker hub
+                sh '''
+                cd auth
+                docker push -t devopseasylearning/s4-clovis-db:$(BUILD_NUMBER)
+                cd -
+                '''
+            }
+        }
+
+
         stage('Build ui') {
             steps {
                 // log in to Docker hub
                 sh '''
                 cd auth
                 docker build -t devopseasylearning/s4-pipeline-ui:$(BUILD_NUMBER)
+                cd -
+                '''
+            }
+        }
+
+
+        stage('push ui') {
+            steps {
+                // log in to Docker hub
+                sh '''
+                cd auth
+                docker push -t devopseasylearning/s4-clovis-ui:$(BUILD_NUMBER)
                 cd -
                 '''
             }
@@ -45,5 +103,16 @@ pipeline {
             }
         }
 
+
+        stage('push weather') {
+            steps {
+                // log in to Docker hub
+                sh '''
+                cd auth
+                docker push -t devopseasylearning/s4-clovis-weather:$(BUILD_NUMBER)
+                cd -
+                '''
+            }
+        }
     }
 }
