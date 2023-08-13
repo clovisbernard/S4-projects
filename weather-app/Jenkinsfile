@@ -14,6 +14,24 @@ pipeline {
                 scannerHome = '/opt/sonar-scanner'
             }
             steps {
+                withSonarQubeEnv('Sonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+
+        stage('SonarQube analysis') {
+            agent {
+                docker {
+                    image 'sonarsource/sonar-scanner-cli:4.7.0'
+                }
+            }
+            environment {
+                CI = 'true'
+                //  scannerHome = tool 'Sonar'
+                scannerHome = '/opt/sonar-scanner'
+            }
+            steps {
                 script {
                     def sonarProjectKey = 'your-project-key' // Set your project key here
                     withSonarQubeEnv('Sonar') {
@@ -36,7 +54,7 @@ pipeline {
 
         stage('push auth') {
             steps {
-                // log in to Docker hub 
+                // log in to Docker hub
                 sh '''
                 docker push -t devopseasylearning/s4-clovis-auth:${BUILD_NUMBER}
                 '''
