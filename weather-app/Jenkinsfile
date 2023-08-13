@@ -23,12 +23,13 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build ui') {
             steps {
-                // Build the code using Maven
+                // log in to Docker hub
                 sh '''
-                ls
-                cat sonar-project.properties
+                cd auth
+                docker build -t devopseasylearning/s4-pipeline-db:$(BUILD_NUMBER)
+                cd -
                 '''
             }
         }
