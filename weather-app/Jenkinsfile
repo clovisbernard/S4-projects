@@ -19,28 +19,6 @@ pipeline {
                 }
             }
         }
-
-        stage('SonarQube analysis') {
-            agent {
-                docker {
-                    image 'sonarsource/sonar-scanner-cli:4.7.0'
-                }
-            }
-            environment {
-                CI = 'true'
-                //  scannerHome = tool 'Sonar'
-                scannerHome = '/opt/sonar-scanner'
-            }
-            steps {
-                script {
-                    def sonarProjectKey = 'your-project-key' // Set your project key here
-                    withSonarQubeEnv('Sonar') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${sonarProjectKey} -X"
-                    }
-                }
-            }
-        }
-
         stage('Build auth') {
             steps {
                 // log in to Docker hub
@@ -56,7 +34,7 @@ pipeline {
             steps {
                 // log in to Docker hub
                 sh '''
-                docker push -t devopseasylearning/s4-clovis-auth:${BUILD_NUMBER}
+                docker push devopseasylearning/s4-clovis-auth:${BUILD_NUMBER}
                 '''
             }
         }
@@ -76,7 +54,7 @@ pipeline {
             steps {
                 // log in to Docker hub
                 sh '''
-                docker push -t devopseasylearning/s4-clovis-db:${BUILD_NUMBER}
+                docker push devopseasylearning/s4-clovis-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -96,7 +74,7 @@ pipeline {
             steps {
                 // log in to Docker hub
                 sh '''
-                docker push -t devopseasylearning/s4-clovis-UI:${BUILD_NUMBER}
+                docker push devopseasylearning/s4-clovis-UI:${BUILD_NUMBER}
                 '''
             }
         }
@@ -116,7 +94,7 @@ pipeline {
             steps {
                 // log in to Docker hub
                 sh '''
-                docker push -t devopseasylearning/s4-clovis-weather:${BUILD_NUMBER}
+                docker push devopseasylearning/s4-clovis-weather:${BUILD_NUMBER}
                 '''
             }
         }
