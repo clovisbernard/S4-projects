@@ -36,7 +36,7 @@ pipeline {
 
         stage('push auth') {
             steps {
-                // log in to Docker hub
+                // log in to Docker hub    test
                 sh '''
                 docker push -t devopseasylearning/s4-clovis-auth:${BUILD_NUMBER}
                 '''
