@@ -35,25 +35,25 @@ pipeline {
                 }
             }
         }
-        stage('Build auth') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                cd auth
-                docker build -t devopseasylearning/s4-pipeline-auth:${BUILD_NUMBER} .
-                cd -
-                '''
-            }
-        }
+        // stage('Build auth') {
+        //     steps {
+        //         // log in to Docker hub
+        //         sh '''
+        //         cd auth
+        //         docker build -t devopseasylearning/s4-pipeline-auth:${BUILD_NUMBER} .
+        //         cd -
+        //         '''
+        //     }
+        // }
 
-        stage('push auth') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                docker push devopseasylearning/s4-clovis-auth:${BUILD_NUMBER}
-                '''
-            }
-        }
+        // stage('push auth') {
+        //     steps {
+        //         // log in to Docker hub
+        //         sh '''
+        //         docker push devopseasylearning/s4-clovis-auth:${BUILD_NUMBER}
+        //         '''
+        //     }
+        // }
 
         stage('Build DB') {
             steps {
@@ -133,4 +133,4 @@ pipeline {
         }
     }
 }
-                // test
+
