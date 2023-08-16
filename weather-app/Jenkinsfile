@@ -1,136 +1,23 @@
 pipeline {
     agent any
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '20'))
-        disableConcurrentBuilds()
-        timeout(time: 60, unit: 'MINUTES')
-        timestamps()
-    }
+    
     stages {
-        stage('Hello') {
+        stage('Build') {
             steps {
-                sh '''
-                ls
-                pwd
-                '''
+                echo 'Building the Java application'
+                // You can replace the following commands with your actual build commands
+                sh 'javac HelloWorld.java'
             }
         }
     }
-
-    stages {
-        stage('SonarQube analysis') {
-            agent {
-                docker {
-                    image 'sonarsource/sonar-scanner-cli:4.7.0'
-                }
-            }
-            environment {
-                CI = 'true'
-                //  scannerHome = tool 'Sonar'
-                scannerHome = '/opt/sonar-scanner'
-            }
-            steps {
-                withSonarQubeEnv('Sonar') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
-        stage('Build auth') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                cd auth
-                docker build -t devopseasylearning/s4-pipeline-auth:${BUILD_NUMBER} .
-                cd -
-                '''
-            }
-        }
-
-        stage('push auth') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                docker push devopseasylearning/s4-clovis-auth:${BUILD_NUMBER}
-                '''
-            }
-        }
-
-        stage('Build DB') {
-            steps {
-                // log in to Docker hub .......
-                sh '''
-                cd db
-                docker build -t devopseasylearning/s4-pipeline-db:${BUILD_NUMBER} .
-                cd -
-                '''
-            }
-        }
-
-        stage('push DB') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                docker push devopseasylearning/s4-clovis-db:${BUILD_NUMBER}
-                '''
-            }
-        }
-
-        stage('Build UI') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                cd UI
-                docker build -t devopseasylearning/s4-pipeline-UI:${BUILD_NUMBER} .
-                cd -
-                '''
-            }
-        }
-
-        stage('push UI') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                docker push devopseasylearning/s4-clovis-UI:${BUILD_NUMBER}
-                '''
-            }
-        }
-
-        stage('Build weather') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                cd weather
-                docker build -t devopseasylearning/s4-pipeline-weather:${BUILD_NUMBER} .
-                cd -
-                '''
-            }
-        }
-
-        stage('push weather') {
-            steps {
-                // log in to Docker hub
-                sh '''
-                docker push devopseasylearning/s4-clovis-weather:${BUILD_NUMBER}
-                '''
-            }
-        }
-    }
+    
     post {
         success {
-            slackSend(channel: '#development-alerts', color: 'good', message: "SUCCESSFUL: Application S4-PIPELINE  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            echo 'Build successful! Deploying...'
+            // Add deployment steps here
         }
-
-        unstable {
-            slackSend(channel: '#development-alerts', color: 'warning', message: "UNSTABLE: Application S4-PIPELINE  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-        }
-
         failure {
-            slackSend(channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Application S4-PIPELINE Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-        }
-
-        cleanup {
-            deleteDir()
+            echo 'Build failed. Not deploying.'
         }
     }
 }
-                // test
