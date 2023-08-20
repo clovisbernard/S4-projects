@@ -1,17 +1,18 @@
 pipeline {
     agent any
-  stages {
-    stage('Build auth') {
-      steps {
-        script {
-          // Log in to Docker Hub
-          sh '''
-                        // cd auth
+
+    stages {
+        stage('Build auth') {
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                        cd auth
                         docker build -t devopseasylearning/s4-pipeline-auth:${BUILD_NUMBER} .
                         cd -
                     '''
+                }
+            }
         }
-      }
     }
-  }
 }
