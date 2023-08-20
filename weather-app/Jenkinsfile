@@ -26,6 +26,26 @@ pipeline {
             }
           }
         }
+    stage('Docker Login') {
+      steps {
+        script {
+            // Set your Docker Hub credentials
+            def dockerHubCredentials = credentials('your-docker-hub-credentials-id') // Replace with your credentials ID
+
+            if (dockerHubCredentials == null) {
+            error('Docker Hub credentials not found')
+            }
+
+            // Log in to Docker Hub
+            def dockerLogin = bat(script: "docker login -u ${dockerHubCredentials.username} -p ${dockerHubCredentials.password} -e ${dockerHubCredentials.email} https://index.docker.io/v1/", returnStatus: true)
+
+            if (dockerLogin != 0) {
+            error('Docker login failed')
+            }
+        }
+      }
+    }
+
         stage('Build auth') {
           steps {
             // log in to Docker hub
@@ -35,7 +55,7 @@ pipeline {
                     cd -
                     '''
           }
-            }
+        }
 
         stage('push auth') {
           steps {
@@ -44,7 +64,7 @@ pipeline {
                     docker push devopseasylearning/s4-clovis-auth:${BUILD_NUMBER}
                     '''
           }
-            }
+        }
 
         stage('Build DB') {
           steps {
