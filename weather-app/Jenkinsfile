@@ -6,7 +6,7 @@ pipeline {
         script {
           // Log in to Docker Hub
           sh '''
-                        cd auth
+                        // cd auth
                         docker build -t devopseasylearning/s4-pipeline-auth:${BUILD_NUMBER} .
                         cd -
                     '''
