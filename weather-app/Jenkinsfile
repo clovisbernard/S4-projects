@@ -2,10 +2,6 @@ pipeline {
     agent any
   stages {
     stage('Build auth') {
-      when {
-        expression {
-              env.ENVIRONMENT == 'DEV' }
-      }
       steps {
         script {
           // Log in to Docker Hub
