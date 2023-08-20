@@ -7,7 +7,7 @@ pipeline {
         timeout(time: 60, unit: 'MINUTES')
         timestamps()
     }
-    
+
     stages {
         stage('SonarQube analysis') {
           agent {
@@ -17,7 +17,7 @@ pipeline {
           }
           environment {
             CI = 'true'
-            //  scannerHome = tool 'Sonar'
+            //  scannerHome = tool 'Sonar' bbb
             scannerHome = '/opt/sonar-scanner'
           }
           steps {
