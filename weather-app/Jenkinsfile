@@ -19,10 +19,10 @@ pipeline {
     }
 
     stage('push auth ') {
-      // when {
-      //   expression {
-      //         env.ENVIRONMENT == 'DEV' }
-      // }
+      when {
+        expression {
+              env.ENVIRONMENT == 'DEV' }
+      }
       steps {
         script {
           // Log in to Docker Hub
