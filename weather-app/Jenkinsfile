@@ -134,23 +134,58 @@ pipeline {
                     '''
           }
         }
-    }
+        stage('update charts') {
+          steps {
+        script {
+              sh '''
+              cd ${WORKSPACE}/charts/wetaherapp-auth
+              cat << EOF > output.txt.
+              image:
+                repository: devopseasylearning/s4-pipeline-auth
+                tag: "${BUILD_NUMBER} "
+              EOF
+
+              cd ${WORKSPACE}/charts/wetaherapp-mysql
+              cat << EOF > output.txt.
+              image:
+                repository: devopseasylearning/s4-pipeline-db
+                tag: "${BUILD_NUMBER} "
+              EOF
+
+              cd ${WORKSPACE}/charts/wetaherapp-UI
+              cat << EOF > output.txt.
+              image:
+                repository: devopseasylearning/s4-pipeline-UI
+                tag: "${BUILD_NUMBER} "
+              EOF
+
+              cd ${WORKSPACE}/charts/wetaherapp-weather
+              cat << EOF > output.txt.
+              image:
+                repository: devopseasylearning/s4-pipeline-weather
+                tag: "${BUILD_NUMBER} "
+              EOF
+
+              '''
+        }
+          }
+        }
     post {
         success {
-      slackSend(channel: '#development-alerts', color: 'good', message: "SUCCESSFUL: Application S4-PIPELINE  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        slackSend(channel: '#development-alerts', color: 'good', message: "SUCCESSFUL: Application S4-PIPELINE  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
 
         unstable {
-      slackSend(channel: '#development-alerts', color: 'warning', message: "UNSTABLE: Application S4-PIPELINE  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        slackSend(channel: '#development-alerts', color: 'warning', message: "UNSTABLE: Application S4-PIPELINE  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
 
         failure {
-      slackSend(channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Application S4-PIPELINE Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        slackSend(channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Application S4-PIPELINE Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
 
         cleanup {
-      deleteDir()
+        deleteDir()
         }
     }
+    }
 }
-                // test
