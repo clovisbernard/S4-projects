@@ -7,10 +7,25 @@ pipeline {
         timestamps()
       }
     stages {
-        stage('test') {
-            steps {
-                // Build the code using Maven
-                sh 'ls'
+         stage('SonarQube analysis') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            agent {
+                docker {
+                  image 'sonarsource/sonar-scanner-cli:4.7.0'
+                }
+               }
+               environment {
+        CI = 'true'
+        //  scannerHome = tool 'Sonar'
+        scannerHome='/opt/sonar-scanner'
+    }
+            steps{
+                withSonarQubeEnv('Sonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
             }
         }
     }
