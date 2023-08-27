@@ -7,7 +7,7 @@ pipeline {
         timestamps()
       }
     environment {
-    DOCKERHUB_CREDS = creds('dockerhub-creds')
+        DOCKERHUB_CREDS = credentials('dockerhub-creds') 
     }
     stages {
          stage('SonarQube analysis') {
@@ -21,6 +21,8 @@ pipeline {
         //  scannerHome = tool 'Sonar'
         scannerHome='/opt/sonar-scanner'
     }
+
+
             steps{
                 withSonarQubeEnv('Sonar') {
                     sh "${scannerHome}/bin/sonar-scanner"
@@ -29,9 +31,7 @@ pipeline {
         }
 
 
-
-
-       stage("Quality gate") {
+       stage('Quality gate') {
             steps {
              timeout(time: 1, unit: 'HOURS') {
                 WaitForQualityGate abortPipeline: true
@@ -41,12 +41,12 @@ pipeline {
 
 
 
-       stage('Docker login') {
+        stage('Docker Login') {
             steps {
                 script {
-                    // login in the Docker Hub
-                    sh ''' 
-                          echo "${DOCKERHUB_CREDS_PSW}" | docker login --username "${DOCKERHUB_CREDS_USR}" --password-stdin
+                    // Log in to Docker Hub
+                    sh '''
+                        echo "${DOCKERHUB_CREDS_PSW}" | docker login --username "${DOCKERHUB_CREDS_USR}" --password-stdin
                     '''
                 }
             }
