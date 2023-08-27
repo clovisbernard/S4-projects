@@ -28,5 +28,15 @@ pipeline {
                 }
             }
         }
+        stage('Docker Login') {
+            steps {
+            script {
+                // Log in to Docker Hub
+                sh '''
+                    echo "${DOCKERHUB_CREDS_PSW}" | docker login --username "${DOCKERHUB_CREDS_USR}" --password-stdin
+                '''
+                }
+            }
+        }
     }
 }
