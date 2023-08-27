@@ -14,7 +14,7 @@ pipeline {
                 // Build the code using Maven
                 sh '''
                 ls 
-                cat sonar-project.properties 
+                cat weather-app/sonar-project.properties 
                 '''
             }
         }
