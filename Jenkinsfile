@@ -21,14 +21,13 @@ pipeline {
         //  scannerHome = tool 'Sonar'
         scannerHome='/opt/sonar-scanner'
     }
-
+         }
 
             steps{
                 withSonarQubeEnv('Sonar') {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
-        }
 
 
        stage('Quality gate') {
