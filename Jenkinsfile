@@ -6,54 +6,8 @@ pipeline {
         timeout (time: 60, unit: 'MINUTES')
         timestamps()
       }
-    // environment {
-    //     DOCKERHUB_CREDS = credentials('dockerhub-creds') 
-    // }
+
     stages {
-         stage('SonarQube analysis') {
-           when{  
-            expression {
-              env.ENVIRONMENT == 'DEV' }
-              }
-            agent {
-                docker {
-                  image 'sonarsource/sonar-scanner-cli:4.7.0'
-                }
-               }
-               environment {
-        CI = 'true'
-        //  scannerHome = tool 'Sonar'
-        scannerHome='/opt/sonar-scanner'
-    }
-            steps{
-                withSonarQubeEnv('Sonar') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
-
-
-       stage('Quality gate') {
-            steps {
-             timeout(time: 1, unit: 'HOURS') {
-                WaitForQualityGate abortPipeline: true
-             }
-            }
-        }
-
-
-
-        // stage('Docker Login') {
-        //     steps {
-        //         script {
-        //             // Log in to Docker Hub
-        //             sh '''
-        //                 echo "${DOCKERHUB_CREDS_PSW}" | docker login --username "${DOCKERHUB_CREDS_USR}" --password-stdin
-        //             '''
-        //         }
-        //     }
-        // }
-
         stage('test') {
             steps {
                 // Build the code using Maven
