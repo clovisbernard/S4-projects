@@ -6,6 +6,9 @@ pipeline {
         timeout (time: 60, unit: 'MINUTES')
         timestamps()
       }
+        environment {
+        DOCKERHUB_CREDS = credentials('dockerhub-creds') 
+    }
     stages {
          stage('SonarQube analysis') {
            when{  
