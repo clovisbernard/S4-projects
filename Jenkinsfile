@@ -30,9 +30,7 @@ pipeline {
        stage('Login to docker hub') {
             steps {
                 script {
-                    sh '''
-                    echo "${DOCKERHUB_CREDS_PSW}" | docker login --username "${DOCKERHUB_CREDS_USR}" --password-stdin
-                    '''
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                 }
             }
         }
