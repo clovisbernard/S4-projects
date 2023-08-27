@@ -233,4 +233,24 @@ stage('Setup parameters') {
         }
 
     }
+   post {
+   
+   success {
+      slackSend (channel: '#random', color: 'good', message: "SUCCESSFUL: Application weather-app  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
+
+ 
+    unstable {
+      slackSend (channel: '#random', color: 'warning', message: "UNSTABLE: Application weather-app  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
+
+    failure {
+      slackSend (channel: '#random', color: '#FF0000', message: "FAILURE: Application weather-app Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
+   
+    cleanup {
+      deleteDir()
+    }
+}
+
 }
