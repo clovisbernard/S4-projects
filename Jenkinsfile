@@ -27,7 +27,15 @@ pipeline {
                 }
             }
         }
-       stage('Login to docker hub') {
+       stage('Quality gate') {
+            steps {
+             timeout(time: 1, unit: 'HOURS') {
+                WaitForQualityGate abortPipe: true
+             }
+            }
+        }
+
+       stage('Docker login') {
             steps {
                 script {
                     sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
