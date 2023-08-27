@@ -92,5 +92,145 @@ stage('Setup parameters') {
                 }
             }
         }
+
+        stage('Build auth') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                        cd auth 
+                        docker build -t devopseasylearning/s4-pipeline-auth:${BUILD_NUMBER} .
+                        cd -
+                    '''
+                }
+            }
+        }
+
+
+        stage('push auth ') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                       
+                        docker push devopseasylearning/s4-pipeline-auth:${BUILD_NUMBER} 
+                        
+                    '''
+                }
+            }
+        }
+
+
+
+        stage('Build db') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                        cd DB
+                        docker build -t devopseasylearning/s4-pipeline-db:${BUILD_NUMBER} .
+                        cd -
+                    '''
+                }
+            }
+        }
+
+
+        stage('push db ') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                        
+                        docker push devopseasylearning/s4-pipeline-db:${BUILD_NUMBER} 
+                      
+                    '''
+                }
+            }
+        }
+
+        stage('Build ui') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                        cd UI
+                        docker build -t devopseasylearning/s4-pipeline-ui:${BUILD_NUMBER} .
+                        cd -
+                    '''
+                }
+            }
+        }
+
+
+        stage('push ui ') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                        docker push devopseasylearning/s4-pipeline-ui:${BUILD_NUMBER}
+                      
+                    '''
+                }
+            }
+        }
+
+        stage('Build weather') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                        cd weather
+                        docker build -t devopseasylearning/s4-pipeline-weather:${BUILD_NUMBER} .
+                        cd -
+                    '''
+                }
+            }
+        }
+
+
+        stage('push weather ') {
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    sh '''
+                        docker push devopseasylearning/s4-pipeline-weather:${BUILD_NUMBER}
+                    '''
+                }
+            }
+        }
+
     }
 }
