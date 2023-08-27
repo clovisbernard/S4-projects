@@ -60,11 +60,19 @@ stage('Setup parameters') {
         }
     }
 }
+        stage('warning') {
+        steps {
+            script {
+                notifyUpgrade(currentBuild.currentResult, "WARNING")
+                sleep(time:env.WARNTIME, unit:"MINUTES")
+            }
+        }
+        }
          stage('SonarQube analysis') {
-        //    when{  
-        //     expression {
-        //       env.ENVIRONMENT == 'DEV' }
-        //       }
+           when{  
+            expression {
+              env.ENVIRONMENT == 'DEV' }
+              }
             agent {
                 docker {
                   image 'sonarsource/sonar-scanner-cli:4.7.0'
