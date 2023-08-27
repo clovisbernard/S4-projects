@@ -232,6 +232,58 @@ stage('Setup parameters') {
             }
         }
 
+   stage('Update QA  charts') {
+      when{  
+          expression {
+            env.ENVIRONMENT == 'QA' }
+          
+            }
+      
+            steps {
+                script {
+
+                    sh '''
+rm -rf S4-projects-charts || true
+git clone git@github.com:devopseasylearning/S4-projects-charts.git
+cd S4-projects-charts
+
+cat << EOF > charts/weatherapp-auth/qa-values.yaml
+image:
+  repository: devopseasylearning/s4-pipeline-auth
+  tag: qa-$auth_tag
+EOF
+
+
+cat << EOF > charts/weatherapp-mysql/qa-values.yaml
+image:
+  repository: devopseasylearning/s4-pipeline-db
+  tag: qa-$db_tag
+EOF
+
+cat << EOF > charts/weatherapp-ui/qa-values.yaml
+image:
+  repository: devopseasylearning/s4-pipeline-ui
+  tag: qa-$ui_tag
+EOF
+
+cat << EOF > charts/weatherapp-weather/qa-values.yaml
+image:
+  repository: devopseasylearning/s4-pipeline-weather
+  tag: qa-$weather_tag
+EOF
+
+
+git config --global user.name "devopseasylearning"
+git config --global user.email "info@devopseasylearning.com"
+
+git add -A 
+git commit -m "change from jenkins CI"
+git push 
+                    '''
+                }
+            }
+        }
+
     }
    post {
    
