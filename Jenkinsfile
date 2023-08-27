@@ -304,5 +304,10 @@ git push
       deleteDir()
     }
 }
-
+   stage('Update Preprod  charts') {
+      when{  
+          expression {
+            env.ENVIRONMENT == 'PREPROD' }
+          
+            }
 }
