@@ -6,6 +6,7 @@
 - Event bridge is not needed
 
 
+
 how many services?
 language: go
 02 dockerfiles
